@@ -71,7 +71,7 @@ class _UserdetialsState extends State<Userdetials> {
                           decoration: BoxDecoration(
                               color: whiteColor,
                               borderRadius: BorderRadius.circular(8),
-                              boxShadow: const [
+                              boxShadow: [
                                 BoxShadow(
                                     blurRadius: 1,
                                     color: Colors.grey,
@@ -105,15 +105,16 @@ class _UserdetialsState extends State<Userdetials> {
                               ),
                               Spacer(),
                               InkWell(
-                                  onTap: () async {
-                                    final updated = await showMyDialog(
+                                  onTap: () {
+                                    showMyDialog(
                                         context: context,
                                         orderId: userViewModel
                                                 .myOrderList[index].id ??
                                             0);
-                                    if (updated) {
+
+                                    setState(() {
                                       userViewModel.getMyOrder(id: widget.id);
-                                    }
+                                    });
                                   },
                                   child: Container(
                                       decoration: BoxDecoration(
@@ -121,7 +122,7 @@ class _UserdetialsState extends State<Userdetials> {
                                               status: userViewModel.status),
                                           borderRadius:
                                               BorderRadius.circular(8)),
-                                      padding: const EdgeInsets.symmetric(
+                                      padding: EdgeInsets.symmetric(
                                           horizontal: 10, vertical: 5),
                                       child: Text(
                                         userViewModel.status ?? '',
@@ -162,7 +163,7 @@ class _UserdetialsState extends State<Userdetials> {
                 children: [
                   ListView.separated(
                     separatorBuilder: (context, index) {
-                      return const SizedBox(
+                      return SizedBox(
                         height: 10,
                       );
                     },
@@ -170,12 +171,13 @@ class _UserdetialsState extends State<Userdetials> {
                     itemCount: userViewModel.statuses.length,
                     itemBuilder: (context, index) {
                       return InkWell(
-                        onTap: () {
+                        onTap: () async {
                           userViewModel.status = userViewModel.statuses[index];
-                          userViewModel.updateStatus(
+                          await userViewModel.updateStatus(
                               context: context,
                               id: orderId,
                               status: userViewModel.status);
+                          Navigator.pop(context);
                           setState(() {
                             userViewModel.getMyOrder(id: widget.id);
                           });
@@ -190,7 +192,7 @@ class _UserdetialsState extends State<Userdetials> {
                       );
                     },
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 10,
                   ),
                 ],

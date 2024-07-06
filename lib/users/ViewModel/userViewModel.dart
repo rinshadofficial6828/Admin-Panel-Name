@@ -26,17 +26,18 @@ class UserViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  getMyOrder({required int id}) async {
+  Future getMyOrder({required int id}) async {
     await userRepo.fetchOrderbyId(id: id).then(
       (value) {
         print(value?.toJson());
         myOrderList = value?.orders ?? [];
+        notifyListeners();
       },
     );
     notifyListeners();
   }
 
-  updateStatus(
+  Future updateStatus(
       {required int id,
       required String status,
       required BuildContext context}) async {
@@ -48,14 +49,12 @@ class UserViewModel extends ChangeNotifier {
               context: context,
               color: Colors.red,
               message: 'Failed to update shipping status');
-          notifyListeners();
         } else {
-          Navigator.of(context).pop();
-          showFlushBarCustom(
-              context: context,
-              color: Colors.cyan,
-              message: 'succefully  update shipping status');
-          notifyListeners();
+          // Navigator.of(context).pop();
+          // showFlushBarCustom(
+          //     context: context,
+          //     color: Colors.cyan,
+          //     message: 'succefully  update shipping status');
         }
       },
     );
